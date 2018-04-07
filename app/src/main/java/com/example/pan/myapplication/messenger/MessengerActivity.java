@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.pan.myapplication.R;
 
@@ -23,8 +25,10 @@ import com.example.pan.myapplication.R;
 
 public class MessengerActivity extends AppCompatActivity {
 
+    public static final int MSG_FROM_SERVER=1;
     private boolean mBound=false;
     private Messenger messenger;
+
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection = new ServiceConnection() {
 
@@ -32,6 +36,7 @@ public class MessengerActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
+
             messenger=new Messenger(service);
             mBound = true;
         }
@@ -42,6 +47,24 @@ public class MessengerActivity extends AppCompatActivity {
             mBound = false;
         }
     };
+
+    private Handler clientHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case MSG_FROM_SERVER:
+                    Bundle bundle=msg.getData();
+                    String str=bundle.getString("msg","");
+                    Toast.makeText(MessengerActivity.this,"msg from server: "+str,Toast.LENGTH_SHORT).show();
+                    break;
+                    default:
+                        break;
+            }
+        }
+    };
+
+    private  Messenger clientMessenger=new Messenger(clientHandler);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,8 +89,13 @@ public class MessengerActivity extends AppCompatActivity {
 
     public void action(View view){
         if (null!=messenger && mBound){
+            //发送消息，并设置接收消息处理器
             Message message=Message.obtain();
-            message.what=MessengerService.MSG_RANDOM;
+            message.what=MessengerService.MSG_FROM_CLIENT;
+            Bundle bundle=new Bundle();
+            bundle.putString("msg","msg from client by Messenger   author jackpanq");
+            message.setData(bundle);
+            message.replyTo=clientMessenger;
             try{
                 messenger.send(message);
             }catch (RemoteException e){
