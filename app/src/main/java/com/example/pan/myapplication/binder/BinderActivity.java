@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class BinderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_binder);
         ActionBar actionBar=getSupportActionBar();
         actionBar.setTitle("Binder Test");
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -73,6 +75,16 @@ public class BinderActivity extends AppCompatActivity {
             unbindService(mConnection);
             mBound = false;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish(); // back button
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

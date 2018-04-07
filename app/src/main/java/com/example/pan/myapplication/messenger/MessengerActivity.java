@@ -12,6 +12,7 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.pan.myapplication.R;
@@ -48,6 +49,7 @@ public class MessengerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_messenger);
         ActionBar actionBar=getSupportActionBar();
         actionBar.setTitle("Messenger Test");
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -84,5 +86,15 @@ public class MessengerActivity extends AppCompatActivity {
             unbindService(mConnection);
             mBound = false;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish(); // back button
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -20,16 +20,18 @@
 
         <activity android:name=".binder.BinderActivity"/>
 
-        <service android:name=".binder.BinderService"/>
+        <service android:name=".binder.BinderService" />
 
 
         <activity android:name=".messenger.MessengerActivity"/>
 
-        <service android:name=".messenger.MessengerService"/>
+        <service android:name=".messenger.MessengerService"
+            android:process=":messenger"/>
 
 
         <activity android:name=".aidl.AIDLActivity"/>
-        <service android:name=".aidl.AIDLService"/>
+        <service android:name=".aidl.AIDLService"
+            android:process=":aidl"/>
     </application>
 
 </manifest>

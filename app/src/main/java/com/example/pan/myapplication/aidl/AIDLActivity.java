@@ -9,6 +9,7 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -30,6 +31,8 @@ public class AIDLActivity extends AppCompatActivity {
         setContentView(R.layout.activity_aidl);
         ActionBar actionBar=getSupportActionBar();
         actionBar.setTitle("AIDL Test");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
     }
 
     @Override
@@ -94,5 +97,15 @@ public class AIDLActivity extends AppCompatActivity {
             unbindService(mConnection);
             mBound = false;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish(); // back button
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
